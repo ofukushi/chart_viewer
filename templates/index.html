@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price and Margin Chart</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+        form {
+            margin-bottom: 2rem;
+        }
+        label {
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        input[type="text"] {
+            padding: 0.5rem;
+            width: 200px;
+        }
+        button {
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>JQuants Stock Chart Viewer</h1>
+    <form method="POST">
+        <label for="code">Enter Stock Code:</label>
+        <input type="text" name="code" id="code" 
+               value="{{ request.form['code'] if request.method == 'POST' else '' }}" 
+               required>
+        <button type="submit">Render Chart</button>
+    </form>
+
+    {% if company_name %}
+    <h2>{{ company_name }} ({{ request.form['code'] }})</h2>
+    {% endif %}
+
+    {% if chart %}
+        <div id="chart">{{ chart|safe }}</div>
+    {% else %}
+        <p style="color: red;">No chart available. Please check the stock code or try again later.</p>
+    {% endif %}
+    {% if error %}
+    <div style="color: red; font-weight: bold;">{{ error }}</div>
+    {% endif %}
+    {% if error_message %}
+    <div class="alert alert-danger">{{ error_message }}</div>
+    {% endif %}
+
+
+</body>
+</html>
