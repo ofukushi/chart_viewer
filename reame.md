@@ -33,6 +33,10 @@ gh repo create uweb_11 --public --source=. --push
 # Step 5: Push to GitHub
 git push -u origin main
 
+heroku config:set \
+    G_MAIL_ADDRESS=o.fukushi@gmail.com \
+    J_QUANTS_PASSWORD=7HKhUci36SBk4qX \
+    --app chart-viewer
 
 We now have a working Flask app that:
     Authenticates and fetches data from JQuants API.
@@ -75,3 +79,20 @@ This populates os.environ globally.
 When other modules like utils/fetch.py or utils/auth.py do:
 os.getenv("G_MAIL_ADDRESS")
 It works because os.environ is already populated.
+
+This is a known build error on Heroku with Python 3.13 + pandas==2.2.2.
+💥 Root Cause:
+The latest pandas==2.2.2 uses Cython features that don’t yet fully support Python 3.13, especially under Heroku’s build environment.
+✅ Fix: Downgrade Python version + pin it
+Step 1. Add .python-version file at the root of your project:
+echo "3.11" > .python-versio
+Or use 3.10 (the safest option) if you still face issues.
+Step 2. Add this to runtime.txt as well (Heroku uses this):
+echo "python-3.11.9" > runtime.txt
+    💡 Yes, Heroku uses runtime.txt, not .python-version internally, but including both is good for consistency with local dev tools like pyenv
+Step 3. Commit the changes:
+git add .python-version runtime.txt
+git commit -m "Fix Python version for Heroku build"
+Step 4. Re-deploy:
+git push heroku main
+✅ This should resolve the build failure.
