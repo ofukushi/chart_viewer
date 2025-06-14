@@ -96,3 +96,18 @@ git commit -m "Fix Python version for Heroku build"
 Step 4. Re-deploy:
 git push heroku main
 ✅ This should resolve the build failure.
+
+chart_viewer
+project/
+├── .gitignore
+├── app.py
+├── Dockerfile
+├── Procfile
+├── README.md
+├── requirements.txt
+├── runtime.txt
+├── templates/
+|        └── index.html
+└── utils/
+       ├── auth.py
+       └── fetch.py
