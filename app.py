@@ -228,6 +228,8 @@ def create_combined_chart(df_prices, df_margin, df_shorts, company_name):
             'side': 'right'
         },
         height=750,
+        width=None,  # Let HTML/CSS handle width
+        autosize=True, 
         barmode='overlay'
     )
 
